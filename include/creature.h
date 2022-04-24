@@ -101,13 +101,13 @@ public:
     int16_t getSpeed() const { return speed; }
     void setSpeed(int16_t newSpeed) { speed = newSpeed; }
 
-    std::array<CreatureMove, 4> getMoves() { return moves; }
     CreatureMove* getMove(int index) { return &moves[index]; }
     void addMove(CreatureMove newMove);
     void setMove(CreatureMove newMove, int index) { moves[index] = newMove; }
     std::string getMoveName(int index) { return moves[index].getName(); }
     int16_t getNumberOfMoves() const { return usableMoves; }
 
+    void printMoveScreen();
     void printInfo();
 };
 
@@ -125,7 +125,7 @@ public:
     void addCreatureMovePool(int uid, std::vector<CreatureMove> moves);
 };
 
-void dealDamage(Creature *c1, Creature *c2, CreatureMove *c1Move, CreatureMove *c2Move);
+void dealDamage(Creature &c1, Creature &c2, CreatureMove *c1Move, CreatureMove *c2Move);
 
 }
 
