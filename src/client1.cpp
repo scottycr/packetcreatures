@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(4000);
-    serv_addr.sin_addr.s_addr = inet_addr("18.218.184.65");
+    serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
 
     Player p2;
     
