@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
-    getaddrinfo(NULL, "1234", &hints, &res);    
+    getaddrinfo(NULL, "4000", &hints, &res);    
 
     bind(server_socket, res->ai_addr, res->ai_addrlen);
     

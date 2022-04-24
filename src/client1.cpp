@@ -39,8 +39,8 @@ int main(int argc, char **argv) {
     sock = socket(AF_INET, SOCK_STREAM, 0);
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(1234);
-    serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serv_addr.sin_port = htons(4000);
+    serv_addr.sin_addr.s_addr = inet_addr("18.218.184.65");
 
     Player p2;
     
