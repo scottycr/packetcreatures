@@ -5,12 +5,78 @@
 #include <vector>
 #include <unordered_map>
 #include <cstring>
+#include <iostream>
 
 #include "creature.h"
 
 using namespace std;
 
 using namespace creature;
+
+int CreatureMove::nextUID = 0;
+
+string creature::getMoveT(const move_t &mt) {
+    switch (mt) {
+        case PHYSICAL:
+            return "PHYSICAL";
+        case STATUS:
+            return "STATUS";
+        default:
+            return "EMPTY";
+    }
+}
+
+string creature::getElementalT(const elemental_t &et) {
+    switch (et) {
+        case NORMAL:
+            return "NORMAL";
+        case GRASS:
+            return "GRASS";
+        case FIRE:
+            return "FIRE";
+        case WATER:
+            return "WATER";
+        default:
+            return "NONE";
+    }
+}
+
+CreatureMove::CreatureMove() :
+    uid(-1),
+    name("empty"), 
+    category(EMPTY), 
+    type(NONE), 
+    power(0), 
+    uses(0), 
+    accuracy(0)
+{
+    name[MAXNAMESIZE-1] = '\0';
+}
+
+CreatureMove::CreatureMove(
+    string _name, 
+    move_t _category, 
+    elemental_t _type, 
+    int16_t _power, 
+    int16_t _uses, 
+    int16_t _accuracy
+) : uid(nextUID), 
+    category(_category), 
+    type(_type), 
+    power(_power), 
+    uses(_uses), 
+    accuracy(_accuracy) 
+{ 
+    nextUID++;
+    strncpy(name, _name.c_str(), MAXNAMESIZE);
+    name[MAXNAMESIZE-1] = '\0';
+}
+
+void CreatureMove::printInfo() {
+    cout << uid << ' ' << name << endl;
+    cout << getMoveT(category) << ' ' << getElementalT(type) << endl;
+    cout << power << ' '<< uses << ' ' << accuracy << endl;
+}
 
 int Creature::nextUID = 0;
 MoveList creature::masterList = MoveList();
@@ -36,9 +102,9 @@ Creature::Creature(
     string _nickName,
     elemental_t _type,
     int16_t _health,
-    uint8_t _attack,
-    uint8_t _defense,
-    uint8_t _speed
+    int16_t _attack,
+    int16_t _defense,
+    int16_t _speed
 ) : uid(nextUID),
     type(_type),
     health(_health),
@@ -55,48 +121,29 @@ Creature::Creature(
     usableMoves = 0;
 }
 
-void Creature::setMoves(std::array<CreatureMove*, 4> &newMoves) { 
-    moves = newMoves;
+void Creature::addMove(CreatureMove newMove) {
+    if (usableMoves < 4) {
+        moves[usableMoves] = newMove;
+        usableMoves++;
+    } else {
+        cout << "Not enough space! Use setMoves() instead." << endl;
+    } 
+}
+
+void Creature::printInfo() {
+    cout << uid << ' ' << name << endl;
+    cout << getElementalT(type) << endl;
+    cout << health << ' ' << attack << ' ' << defense << ' ' << speed << endl;
+    cout << usableMoves << endl;
+    cout << endl;
     for (auto &m : moves) {
-        if (m->getUID() != -1) usableMoves++;
+        m.printInfo();
+        cout << endl;
     }
 }
 
-int CreatureMove::nextUID = 0;
-
-CreatureMove::CreatureMove() :
-    uid(-1),
-    name("empty"), 
-    category(EMPTY), 
-    type(NONE), 
-    power(0), 
-    uses(0), 
-    accuracy(0)
-{
-    name[MAXNAMESIZE-1] = '\0';
-}
-
-CreatureMove::CreatureMove(
-    string _name, 
-    move_t _category, 
-    elemental_t _type, 
-    uint8_t _power, 
-    uint8_t _uses, 
-    uint8_t _accuracy
-) : uid(nextUID), 
-    category(_category), 
-    type(_type), 
-    power(_power), 
-    uses(_uses), 
-    accuracy(_accuracy) 
-{ 
-    nextUID++;
-    strncpy(name, _name.c_str(), MAXNAMESIZE);
-    name[MAXNAMESIZE-1] = '\0';
-}
-
-void MoveList::addMove(CreatureMove* newMove) {
-    moves.insert(make_pair(newMove->getUID(), newMove));
+void MoveList::addMove(CreatureMove newMove) {
+    moves.insert(make_pair(newMove.getUID(), newMove));
 }
 
 // Maybe don't need this?
@@ -105,10 +152,10 @@ void MoveList::addMove(CreatureMove* newMove) {
 } */
 
 void MoveList::initCreatureMovePool(int uid) {
-    creatureMovePools.insert(make_pair(uid, vector<CreatureMove*>()));
+    creatureMovePools.insert(make_pair(uid, vector<CreatureMove>()));
 }
 
-void MoveList::addCreatureMovePool(int uid, vector<CreatureMove*> &moves) {
+void MoveList::addCreatureMovePool(int uid, vector<CreatureMove> moves) {
     creatureMovePools.insert(make_pair(uid, moves));
 }
 

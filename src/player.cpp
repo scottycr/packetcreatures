@@ -14,12 +14,12 @@ int Player::nextUID = 0;
 Player::Player() :
     uid(-1),
     name("empty"),
-    creature(new Creature())
+    creature(Creature())
 {
     name[MAXNAMESIZE-1] = '\0';
 }
 
-Player::Player(string _name, Creature* _creature) :
+Player::Player(string _name, Creature _creature) :
     uid(nextUID),
     creature(_creature)
 {
@@ -29,7 +29,7 @@ Player::Player(string _name, Creature* _creature) :
 }
 
 void Player::printInfo() {
-    cout << uid << endl;
-    cout << name << endl;
-    cout << creature << endl;
+    cout << uid << ' ' << name << endl;
+    cout << endl;
+    creature.printInfo();
 }

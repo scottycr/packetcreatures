@@ -24,28 +24,18 @@ int main(int argc, char **argv) {
     // These are just hardcoded for now.
     // Will have a file storing all information later on.
     Creature lizard("Lizard", "", FIRE, 39, 52, 43, 65);
-    array<CreatureMove*, 4> lizardMoves;
     Creature turtle("Turtle", "", WATER, 44, 48, 65, 43);
-    array<CreatureMove*, 4> turtleMoves;
     
     CreatureMove scratch("Scratch", PHYSICAL, NORMAL, 40, 35, 100);
-    masterList.addMove(&scratch);
-    lizardMoves[0] = &scratch;
-    lizardMoves[1] = masterList.getMove(-1);
-    lizardMoves[2] = masterList.getMove(-1);
-    lizardMoves[3] = masterList.getMove(-1);
-    lizard.setMoves(lizardMoves);
+    masterList.addMove(scratch);
+    lizard.addMove(scratch);
 
     CreatureMove tackle("Tackle", PHYSICAL, NORMAL, 50, 35, 100);
-    masterList.addMove(&tackle);
-    turtleMoves[0] = &tackle;
-    turtleMoves[1] = masterList.getMove(-1);
-    turtleMoves[2] = masterList.getMove(-1);
-    turtleMoves[3] = masterList.getMove(-1);
-    turtle.setMoves(turtleMoves);
+    masterList.addMove(tackle);
+    turtle.addMove(tackle);
 
-    Player bro("Bro", &lizard);
-    Player dude("Dude", &turtle);
+    Player bro("Bro", lizard);
+    Player dude("Dude", turtle);
     // End of hardcoded things.  
 
     int sock;
@@ -60,6 +50,9 @@ int main(int argc, char **argv) {
 
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     send(sock, &bro, sizeof(Player), 0);
+
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     send(sock, &dude, sizeof(Player), 0);
 
