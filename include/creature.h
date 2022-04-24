@@ -26,48 +26,8 @@ enum elemental_t {
 
 const int MAXNAMESIZE = 13;
 
-class CreatureMove;
 class MoveList;
 extern MoveList masterList;
-
-class Creature {
-private:
-    int uid;
-    static int nextUID;
-    char name[MAXNAMESIZE], nickName[MAXNAMESIZE];
-    elemental_t type;
-    uint8_t health, attack, defense, speed;
-    std::array<CreatureMove*, 4> moves;
-
-public:
-    Creature();
-    Creature(
-        std::string _name, 
-        std::string _nickName, 
-        elemental_t _type, 
-        int16_t _health,
-        uint8_t _attack, 
-        uint8_t _defense, 
-        uint8_t _speed
-    );
-    
-    int getUID() const { return uid; }
-    std::string getName() const { return std::string(name); }
-    std::string getNickName() const { return std::string(nickName); }
-    void setNickName(std::string newNickName);
-    elemental_t getType() const { return type; }
-    int16_t getHealth() const { return health; }
-    void setHealth(int16_t newHealth) { health = newHealth; }
-    void decreaseHealth(int damage) { health -= damage; }
-    uint8_t getAttack() const { return attack; }
-    void setAttack(uint8_t newAttack) { attack = newAttack; }
-    int8_t getDefense() const { return defense; }
-    void setDefense(uint8_t newDefense) { defense = newDefense; }
-    uint8_t getSpeed() const { return speed; }
-    void setSpeed(uint8_t newSpeed) { speed = newSpeed; }
-    std::array<CreatureMove*, 4>* getMoves() { return &moves; }
-    void setMoves(std::array<CreatureMove*, 4> &newMoves) { moves = newMoves; }
-};
 
 class CreatureMove {
 private:
@@ -98,6 +58,51 @@ public:
     uint8_t getAccuracy() const { return accuracy; } 
 };
 
+class Creature {
+private:
+    int uid;
+    static int nextUID;
+    char name[MAXNAMESIZE], nickName[MAXNAMESIZE];
+    elemental_t type;
+    int16_t health;
+    uint8_t attack, defense, speed;
+    std::array<CreatureMove*, 4> moves;
+    uint8_t usableMoves;
+
+public:
+    Creature();
+    Creature(
+        std::string _name, 
+        std::string _nickName, 
+        elemental_t _type, 
+        int16_t _health,
+        uint8_t _attack, 
+        uint8_t _defense, 
+        uint8_t _speed
+    );
+    
+    int getUID() const { return uid; }
+    std::string getName() const { return std::string(name); }
+    std::string getNickName() const { return std::string(nickName); }
+    void setNickName(std::string newNickName);
+    elemental_t getType() const { return type; }
+    int16_t getHealth() const { return health; }
+    void setHealth(int16_t newHealth) { health = newHealth; }
+    void decreaseHealth(int damage) { health -= damage; }
+    uint8_t getAttack() const { return attack; }
+    void setAttack(uint8_t newAttack) { attack = newAttack; }
+    int8_t getDefense() const { return defense; }
+    void setDefense(uint8_t newDefense) { defense = newDefense; }
+    uint8_t getSpeed() const { return speed; }
+    void setSpeed(uint8_t newSpeed) { speed = newSpeed; }
+
+    std::array<CreatureMove*, 4>* getMoves() { return &moves; }
+    CreatureMove* getMove(int index) { return moves[index]; }
+    void setMoves(std::array<CreatureMove*, 4> &newMoves);
+    std::string getMoveName(int index) { return moves[index]->getName(); }
+    uint8_t getNumberOfMoves() const { return usableMoves; }
+};
+
 class MoveList {
 private:
     std::unordered_map<int, CreatureMove*> moves;
@@ -112,7 +117,7 @@ public:
     void addCreatureMovePool(int uid, std::vector<CreatureMove *> &moves);
 };
 
-void dealDamage(Creature &c1, Creature &c2, CreatureMove *c1Move, CreatureMove *c2Move);
+void dealDamage(Creature *c1, Creature *c2, CreatureMove *c1Move, CreatureMove *c2Move);
 
 }
 

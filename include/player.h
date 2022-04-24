@@ -19,6 +19,8 @@ public:
 
     int getUID() const { return uid; }
     creature::Creature* getCreature() const { return creature; }
+
+    void printInfo();
 };
 
 }

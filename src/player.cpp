@@ -1,5 +1,6 @@
 #include <string>
 #include <cstring>
+#include <iostream>
 
 #include "creature.h"
 #include "player.h"
@@ -25,4 +26,10 @@ Player::Player(string _name, Creature* _creature) :
     nextUID++;
     strncpy(name, _name.c_str(), MAXNAMESIZE);
     name[MAXNAMESIZE-1] = '\0';
+}
+
+void Player::printInfo() {
+    cout << uid << endl;
+    cout << name << endl;
+    cout << creature << endl;
 }

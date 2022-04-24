@@ -28,6 +28,7 @@ Creature::Creature() :
     name[MAXNAMESIZE-1] = '\0';
     nickName[MAXNAMESIZE-1] = '\0';
     for (unsigned i=0; i<4; i++) moves[i] = masterList.getMove(-1);
+    usableMoves = 0;
 }
 
 Creature::Creature(
@@ -51,6 +52,14 @@ Creature::Creature(
     strncpy(nickName, _nickName.c_str(), MAXNAMESIZE);
     nickName[MAXNAMESIZE-1] = '\0';
     for (unsigned i=0; i<4; i++) moves[i] = masterList.getMove(-1);
+    usableMoves = 0;
+}
+
+void Creature::setMoves(std::array<CreatureMove*, 4> &newMoves) { 
+    moves = newMoves;
+    for (auto &m : moves) {
+        if (m->getUID() != -1) usableMoves++;
+    }
 }
 
 int CreatureMove::nextUID = 0;
@@ -104,70 +113,70 @@ void MoveList::addCreatureMovePool(int uid, vector<CreatureMove*> &moves) {
 }
 
 // Deal with the damage being broken...
-void creature::dealDamage(Creature &c1, Creature &c2, CreatureMove *c1Move, CreatureMove *c2Move) {
+void creature::dealDamage(Creature *c1, Creature *c2, CreatureMove *c1Move, CreatureMove *c2Move) {
     srand(time(NULL));
-    int damage = 0;
+    double damage = 0;
 
     // THIS IS TEMPORARY!!!
     // PLEASE ADD LEVELS TO CREATURES FUTURE ME!!!
     int level = 5;
     // End of warning.
 
-    int power = 0;
-    int attack = 0;
-    int defense = 0;
+    double power = 0;
+    double attack = 0;
+    double defense = 0;
     double random = 0;
     
-    if (c1.getSpeed() > c2.getSpeed()) {
+    if (c1->getSpeed() > c2->getSpeed()) {
         power = c1Move->getPower();
-        attack = c1.getAttack();
-        defense = c2.getDefense();
+        attack = c1->getAttack();
+        defense = c2->getDefense();
         // Somewhere within [.85-1.00].
-        random = (rand() % 16 + 85) / 100;
+        random = (rand() % 16 + 85.0) / 100.0;
 
         damage = ((2 * level) / 5) + 2;
         damage = (damage * power * (attack/defense)) / 50;
         damage = (damage + 2) * random;
-        c2.decreaseHealth(damage);
+        c2->decreaseHealth(static_cast<int>(damage));
         c1Move->useMove();
 
-        if (c2.getHealth() > 0) {
+        if (c2->getHealth() > 0) {
             power = c2Move->getPower();
-            attack = c2.getAttack();
-            defense = c1.getDefense();
+            attack = c2->getAttack();
+            defense = c1->getDefense();
             // Somewhere within [.85-1.00].
-            random = (rand() % 16 + 85) / 100;
+            random = (rand() % 16 + 85.0) / 100.0;
 
             damage = ((2 * level) / 5) + 2;
             damage = (damage * power * (attack/defense)) / 50;
             damage = (damage + 2) * random;
-            c1.decreaseHealth(damage);
+            c1->decreaseHealth(static_cast<int>(damage));
             c2Move->useMove();
         }
     } else {
         power = c2Move->getPower();
-        attack = c2.getAttack();
-        defense = c1.getDefense();
+        attack = c2->getAttack();
+        defense = c1->getDefense();
         // Somewhere within [.85-1.00].
         random = (rand() % 16 + 85) / 100;
 
         damage = ((2 * level) / 5) + 2;
         damage = (damage * power * (attack/defense)) / 50;
         damage = (damage + 2) * random;
-        c1.decreaseHealth(damage);
+        c1->decreaseHealth(static_cast<int>(damage));
         c2Move->useMove();
 
-        if (c1.getHealth() > 0) {
+        if (c1->getHealth() > 0) {
             power = c1Move->getPower();
-            attack = c1.getAttack();
-            defense = c2.getDefense();
+            attack = c1->getAttack();
+            defense = c2->getDefense();
             // Somewhere within [.85-1.00].
             random = (rand() % 16 + 85) / 100;
 
             damage = ((2 * level) / 5) + 2;
             damage = (damage * power * (attack/defense)) / 50;
             damage = (damage + 2) * random;
-            c2.decreaseHealth(damage);
+            c2->decreaseHealth(static_cast<int>(damage));
             c1Move->useMove();
         }
     }

@@ -1,3 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <string.h>
+#include <netdb.h>
+#include <getopt.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <iostream>
 
 #include "creature.h"
@@ -38,13 +48,20 @@ int main(int argc, char **argv) {
     Player dude("Dude", &turtle);
     // End of hardcoded things.  
 
-    printCreatureInfo(bro.getCreature());
-    printCreatureInfo(dude.getCreature());
+    int sock;
+    struct sockaddr_in serv_addr;
+    // char buffer[1024] = {0};
 
-    dealDamage(lizard, turtle, &scratch, &tackle);
+    sock = socket(AF_INET, SOCK_STREAM, 0);
 
-    printCreatureInfo(bro.getCreature());
-    printCreatureInfo(dude.getCreature());
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(1234);
+    serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+    send(sock, &bro, sizeof(Player), 0);
+    connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+    send(sock, &dude, sizeof(Player), 0);
 
     cout << "It worked?" << endl;
 }

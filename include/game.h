@@ -8,8 +8,8 @@ namespace game {
 
 void printCreatureInfo(creature::Creature *c);
 
-void game();
-
+void battle(player::Player &p1, player::Player &p2);
+    
 }
 
 #endif
