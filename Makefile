@@ -1,26 +1,30 @@
 FLAGS=-g -Iinclude -Wall
 FIND_SRC ?= $(shell if [ `uname` = "Darwin" ] ; then echo find -E src ; else echo find src -regextype posix-extended ; fi)
 
-TEST_FILE=src/main.cpp
-SERVER_FILE=src/server.cpp
-CLIENT1_FILE=src/client1.cpp
-CLIENT2_FILE=src/client2.cpp
+TEST_FILE=main.cpp
+SERVER_FILE=server.cpp
+CLIENT_FILE=client.cpp
+CLIENT1_FILE=client1.cpp
+CLIENT2_FILE=client2.cpp
 
-CPP_FILES=$(shell find src -name '*.cpp' -and -not \( -wholename '$(TEST_FILE)' -or -wholename '$(SERVER_FILE)' \
-			-or -wholename '$(CLIENT1_FILE)' -or -wholename '$(CLIENT2_FILE)' \) )
+CPP_FILES=$(shell find src -name '*.cpp' -and -not \( -name '$(TEST_FILE)' -or -name '$(SERVER_FILE)' \
+			-or -name '$(CLIENT1_FILE)' -or -name '$(CLIENT2_FILE)' -or -name '$(CLIENT_FILE)' \) )
 
-all: server client1 client2 
+all: server client 
 
-client: client1 client2
+clients: client1 client2
 
 test:
-	g++ $(FLAGS) $(CPP_FILES) $(MAIN_FILE) -o bin/test.out
+	g++ $(FLAGS) $(CPP_FILES) src/$(MAIN_FILE) -o bin/test.out
 
 server:
-	g++ $(FLAGS) $(CPP_FILES) $(SERVER_FILE) -o bin/server.out
+	g++ $(FLAGS) $(CPP_FILES) src/$(SERVER_FILE) -o bin/server.out
 
+client: 
+	g++ $(FLAGS) $(CPP_FILES) src/$(CLIENT_FILE) -o bin/client.out
+	
 client1:
-	g++ $(FLAGS) $(CPP_FILES) $(CLIENT1_FILE) -o bin/client1.out
+	g++ $(FLAGS) $(CPP_FILES) src/$(CLIENT1_FILE) -o bin/client1.out
 
 client2:
-	g++ $(FLAGS) $(CPP_FILES) $(CLIENT2_FILE) -o bin/client2.out
+	g++ $(FLAGS) $(CPP_FILES) src/$(CLIENT2_FILE) -o bin/client2.out
