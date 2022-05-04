@@ -57,8 +57,10 @@ int main(int argc, char **argv) {
     Player p1;
     Player p2;
     
+    cout << "Waiting for clients..." << endl;
     unsigned int addrlen = sizeof(remote_address);
     while (connected_clients < 2) {
+
         FD_ZERO(&readfds);
         FD_SET(server_socket, &readfds);
         max_sd = server_socket;
@@ -85,6 +87,10 @@ int main(int argc, char **argv) {
             cout << "\tport: " << ntohs(remote_address.sin_port) << endl; 
             client_socket[connected_clients] = new_socket;
             connected_clients++;
+
+            sprintf(buffer, "You have succesfully connected to the server!\nYou are client #%d", connected_clients);
+
+            send(new_socket, buffer, strlen(buffer), 0);
         }
 
     }
