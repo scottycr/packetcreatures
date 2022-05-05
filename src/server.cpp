@@ -60,7 +60,6 @@ int main(int argc, char **argv) {
     cout << "Waiting for clients..." << endl;
     unsigned int addrlen = sizeof(remote_address);
     while (connected_clients < 2) {
-
         FD_ZERO(&readfds);
         FD_SET(server_socket, &readfds);
         max_sd = server_socket;
@@ -186,8 +185,8 @@ int main(int argc, char **argv) {
             send(client_socket[0], &fighting, sizeof(fighting), 0);
             send(client_socket[0], &buffer, MAXBUFFERSIZE, 0);
 
-            send(client_socket[1], &c1, sizeof(c1), 0);
             send(client_socket[1], &c2, sizeof(c2), 0);
+            send(client_socket[1], &c1, sizeof(c1), 0);
             send(client_socket[1], &fighting, sizeof(fighting), 0);
             send(client_socket[1], &buffer, MAXBUFFERSIZE, 0);
         }
