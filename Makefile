@@ -17,4 +17,4 @@ client:
 	g++ $(FLAGS) $(CPP_FILES) src/$(CLIENT_FILE) -o bin/client.out
 
 test:
-	g++ $(FLAGS) $(CPP_FILES) src/$(CLIENT_FILE) -o bin/test.out
+	g++ $(FLAGS) $(CPP_FILES) src/$(TEST_FILE) -o bin/test.out
