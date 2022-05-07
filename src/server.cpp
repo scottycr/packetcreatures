@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
         }
 
         if (turnDone) {
-            dealDamage(c1, c2, c1.getMove(p1MoveUsed), c2.getMove(p2MoveUsed));
+            performTurn(c1, c2, c1.getMove(p1MoveUsed), c2.getMove(p2MoveUsed));
             c1.printInfo();
             c2.printInfo();
 
