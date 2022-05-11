@@ -192,21 +192,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    /* while (1) {
-        unsigned int addrlen = sizeof(struct sockaddr_storage);
-        client_socket = accept(server_socket, (struct sockaddr*)&remote_address, &addrlen);
-        printf("Accepted connection\n");
-
-        bool gameStarted = false;
-        // Game logic
-        if (gameStarted) {
-            strncpy(buffer, "Hello!", strlen(buffer));
-            send(client_socket, buffer, strlen(buffer), 0);
-        }
-
-        close(client_socket);
-    } */
-
     cout << "Exiting server" << endl;
     return 0;
 }
