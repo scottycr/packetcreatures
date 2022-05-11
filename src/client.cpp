@@ -47,16 +47,21 @@ void game(char *serverIP) {
     if (creatureNum == 1) {
         playerCreature = Creature("Lizard", "", FIRE, 39, 52, 43, 65);
         
-        CreatureMove scratch("Scratch", PHYSICAL, NORMAL, 40, 35, 100);
+        CreatureMove scratch("Scratch", PHYSICAL, NORMAL, OPPONENT, 40, 35, 100);
+        CreatureMove leer("Leer", STATUS, NORMAL, OPPONENT, DEFENSE, -1, 30, 100);
         masterList.addMove(scratch);
+        masterList.addMove(leer);
         playerCreature.addMove(scratch);
-
+        playerCreature.addMove(leer);
     } else {
         playerCreature = Creature("Turtle", "", WATER, 44, 48, 65, 43);
 
-        CreatureMove tackle("Tackle", PHYSICAL, NORMAL, 50, 35, 100);
+        CreatureMove tackle("Tackle", PHYSICAL, NORMAL, OPPONENT, 50, 35, 100);
+        CreatureMove growl("Growl", STATUS, NORMAL, OPPONENT, ATTACK, -1, 40, 100);
         masterList.addMove(tackle);
-        playerCreature.addMove(tackle);  
+        masterList.addMove(growl);
+        playerCreature.addMove(tackle);
+        playerCreature.addMove(growl);  
     }
     // End of hardcoded things.
 
