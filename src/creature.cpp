@@ -280,6 +280,7 @@ void creature::performMove(Creature &c1, Creature &c2, CreatureMove *move) {
     float attack = 0;
     float defense = 0;
     float random = 0;
+    int critical = 0;
     
     if (move->getCategory() != STATUS) {
         power = move->getPower();
@@ -288,10 +289,12 @@ void creature::performMove(Creature &c1, Creature &c2, CreatureMove *move) {
         // Somewhere within [.85-1.00].
         srand(time(NULL));
         random = (rand() % 16 + 85.0) / 100.0;
+        critical = rand() % 16;
 
         damage = ((2.0 * level) / 5.0) + 2.0;
         damage = (damage * power * (attack/defense)) / 50.0;
         damage = (damage + 2.0) * random;
+        if (critical == 0) damage *= 2.0;
         move->useMove();
         c2.decreaseHealth(static_cast<int16_t>(damage));
     } else {
